@@ -11,6 +11,7 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Head;
 
+//admin
 
 class AdminController extends Controller
 {
