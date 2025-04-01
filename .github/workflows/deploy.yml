@@ -1,0 +1,50 @@
+name: Deploy Server
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4  
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2" 
+
+      - name: Install Dependencies
+        run: |
+          cd server  # Navigate to the server folder
+          composer install --no-dev --optimize-autoloader  # Install dependencies
+
+      - name: Deploy to technotrends.globalctg1.com
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_IP }}  
+          username: ${{ secrets.SERVER_USER }} 
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}  #line to decrypt the key          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd /var/www/technotrends.globalctg1.com
+
+            git reset --hard  
+            git clean -fd  
+            git pull origin main  
+
+            # Rsync only contents of 'server' directory
+            rsync -av --delete --exclude='.env' --exclude='.htaccess' $GITHUB_WORKSPACE/server/ /var/www/technotrends.globalctg1.com/
+
+            cd /var/www/technotrends.globalctg1.com
+            composer install --no-dev --optimize-autoloader
+
+            php artisan config:clear
+            php artisan cache:clear
+            php artisan view:clear
+            php artisan route:clear
+
+            sudo systemctl restart apache2 || sudo systemctl restart nginx
