@@ -31,16 +31,16 @@ jobs:
           key: ${{ secrets.CPANEL_SSH_KEY }}  # 🔥 Use the private SSH key
           passphrase: ${{ secrets.SSH_PASSPHRASE }}  #line to decrypt the key          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            cd /var/www/technotrends.globalctg1.com
+            cd /home/globalct/technotrends.globalctg1.com
 
             git reset --hard  
             git clean -fd  
             git pull origin main  
 
             # Rsync only contents of 'server' directory
-            rsync -av --delete --exclude='.env' --exclude='.htaccess' $GITHUB_WORKSPACE/server/ /var/www/technotrends.globalctg1.com/
+            rsync -av --delete --exclude='.env' --exclude='.htaccess' $GITHUB_WORKSPACE/server/ /home/globalct/technotrends.globalctg1.com/
 
-            cd /var/www/technotrends.globalctg1.com
+            cd /home/globalct/technotrends.globalctg1.com
             composer install --no-dev --optimize-autoloader
 
             php artisan config:clear
