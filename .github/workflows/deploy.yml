@@ -27,7 +27,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SERVER_IP }}  
-          username: ${{ secrets.SERVER_USER }} 
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.CPANEL_SSH_KEY }}  # 🔥 Use the private SSH key
           passphrase: ${{ secrets.SSH_PASSPHRASE }}  #line to decrypt the key          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /var/www/technotrends.globalctg1.com
