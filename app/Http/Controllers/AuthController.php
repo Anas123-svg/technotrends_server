@@ -35,7 +35,7 @@ class AuthController extends Controller
         $password = $request->password;
     
         if ($role == 'admin' || $role == 'director') {
-            $user = Admin::with(['complaints', 'projects'])->where('email', $email)->first();
+            $user = Admin::where('email', $email)->first();
 
             if (!$user) {
                 return response()->json(['error' => 'Invalid email or role'], 404);
@@ -51,7 +51,7 @@ class AuthController extends Controller
          //   $user = Head::with(['complaints', 'projects'])->where('email', $email)->first();
          $user = Head::where('email', $email)->first();
         } elseif ($role == 'user') {
-            $user = User::with(['complaints', 'projects'])->where('email', $email)->first();
+            $user = User::with([])->where('email', $email)->first();
         } else {
             return response()->json(['error' => 'Invalid role'], 400);
         }
