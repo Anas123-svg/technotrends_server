@@ -30,7 +30,7 @@ jobs:
             git pull origin main  
 
             # Rsync only the contents of the 'server' directory
-            rsync -av --delete --exclude='.env' --exclude='.htaccess' $GITHUB_WORKSPACE/server/ /home/globalct/technotrends.globalctg1.com/
+            scp -r $GITHUB_WORKSPACE/server/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/home/globalct/technotrends.globalctg1.com/
 
             # Optional: If Composer or artisan are needed to be run manually on the server, run those commands here
             # composer install --no-dev --optimize-autoloader
