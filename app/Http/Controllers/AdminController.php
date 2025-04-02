@@ -11,7 +11,7 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Models\Head;
 
-//commit done
+//admin
 
 class AdminController extends Controller
 {
