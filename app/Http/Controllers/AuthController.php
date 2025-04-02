@@ -87,7 +87,7 @@ class AuthController extends Controller
         ]);
     
         if ($user instanceof \App\Models\Admin) {
-            $user->load(['complaints', 'projects']);
+            //$user->load(['complaints', 'projects']);
             $role = $user->isDirector ? 'director' : 'admin';
             Log::info('Admin data loaded', ['user_id' => $user->id]);
         } elseif ($user instanceof \App\Models\Head) {
@@ -95,7 +95,7 @@ class AuthController extends Controller
             $role = 'head';
             Log::info('Head data loaded', ['user_id' => $user->id]);
         } elseif ($user instanceof \App\Models\User) {
-            $user->load(['complaints', 'projects']);
+           // $user->load(['complaints', 'projects']);
             $role = 'user';
             Log::info('User data loaded', ['user_id' => $user->id]);
         } else {
@@ -228,3 +228,111 @@ class AuthController extends Controller
 
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
