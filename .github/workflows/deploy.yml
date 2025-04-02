@@ -1,5 +1,3 @@
-name: Deploy Server
-
 on:
   push:
     branches:
@@ -27,6 +25,9 @@ jobs:
 
             # Navigate to the project directory
             cd /home/globalct/technotrends.globalctg1.com
+
+            # Clean untracked files to avoid conflicts
+            git clean -fd
 
             # Pull the latest changes from the repository
             git pull origin main
