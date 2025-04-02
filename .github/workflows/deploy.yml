@@ -21,6 +21,10 @@ jobs:
           key: ${{ secrets.CPANEL_SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
+            # Add the server's SSH key to known_hosts to avoid verification errors
+            mkdir -p ~/.ssh
+            ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
             # Navigate to the project directory
             cd /home/globalct/technotrends.globalctg1.com
 
