@@ -72,4 +72,27 @@ class ComplaintAssignedToUserController extends Controller
             ], 500);
         }
     }
+
+
+
+
+    public function updateAssignedUser(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'reason' => 'nullable|string|max:255',
+            'statusByUser' => 'nullable|string|max:255', 
+        ]);
+
+        $complaintAssignedToUser = ComplaintAssignedToUsers::findOrFail($id);
+
+        $complaintAssignedToUser->update([
+            'reason' => $validatedData['reason'] ?? $complaintAssignedToUser->reason, 
+            'statusByUser' => $validatedData['statusByUser'] ?? $complaintAssignedToUser->statusByUser,
+        ]);
+
+        return response()->json([
+            'message' => 'Complaint assigned to user updated successfully',
+            'data' => $complaintAssignedToUser,
+        ], 200);
+    }
 }

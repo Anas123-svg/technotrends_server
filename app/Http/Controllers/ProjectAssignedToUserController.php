@@ -67,4 +67,27 @@ class ProjectAssignedToUserController extends Controller
             ], 500);
         }
     }
+
+
+
+
+    public function updateAssignedUser(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'reason' => 'nullable|string|max:255',
+            'statusByUser' => 'nullable|string|max:255', 
+        ]);
+
+        $projectAssignedToUser = ProjectAssignedToUsers::findOrFail($id);
+
+        $projectAssignedToUser->update([
+            'reason' => $validatedData['reason'] ?? $projectAssignedToUser->reason, 
+            'statusByUser' => $validatedData['statusByUser'] ?? $projectAssignedToUser->statusByUser,
+        ]);
+
+        return response()->json([
+            'message' => 'project assigned to user updated successfully',
+            'data' => $projectAssignedToUser,
+        ], 200);
+    }
 }

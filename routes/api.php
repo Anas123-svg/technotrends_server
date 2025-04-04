@@ -48,6 +48,8 @@ Route::prefix('user')->group(function () {
 
 Route::put('/complaint-assigned-users/update/{id}', [ComplaintAssignedToUserController::class, 'updateComplaintAssignedToUser']); //update assigned users to complaint
 Route::put('/project-assigned-users/update/{id}', [ProjectAssignedToUserController::class, 'updateProjectAssignedToUser']);//update assigned users to project
+Route::put('update/assigned-user/complaint/{id}', [ComplaintAssignedToUserController::class, 'updateAssignedUser']);
+Route::put('update/assigned-user/project/{id}', [ProjectAssignedToUserController::class, 'updateAssignedUser']);
 
 Route::post('projects/{id}/assign-head', [ProjectController::class, 'assignToHead']);
 Route::post('projects/{id}/assign-workers', [ProjectController::class, 'assignToWorkers']);

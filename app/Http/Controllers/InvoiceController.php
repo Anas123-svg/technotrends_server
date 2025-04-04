@@ -13,9 +13,21 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('project')->orderBy('created_at', 'desc')->get();
+        $invoices = Invoice::with(['project', 'project.jcReferences', 'project.dcReferences'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        $invoices->map(function ($invoice) {
+            $invoice->jcReferences = $invoice->project->jcReferences;
+            $invoice->dcReferences = $invoice->project->dcReferences;
+            $invoice->project = $invoice->project;
+            //unset($invoice->project);
+            return $invoice;
+        });
+    
         return response()->json($invoices);
     }
+    
 
 public function store(Request $request)
 {
@@ -28,7 +40,7 @@ public function store(Request $request)
             'paymentTerms' => 'nullable|string',
             'creditDays' => 'nullable|string|max:255',
             'dueDate' => 'nullable|string',
-            'linkedProject' => 'nullable|exists:projects,id', // Validating the linked project ID
+            'linkedProject' => 'nullable|exists:projects,id', 
             'status' => 'nullable|string',
             'clientName' => 'nullable|string|max:255',
             'poNumber' => 'nullable|string|max:255',
@@ -40,12 +52,10 @@ public function store(Request $request)
             'invoiceDate' => 'nullable|string',
         ]);
 
-        // Fetch the linked project if the 'linkedProject' exists
         if ($request->has('linkedProject')) {
             $project = Project::find($request->input('linkedProject'));
             
             if ($project) {
-                // Populate validated data with the project fields
                 $validated['clientName'] = $project->clientName;
                 $validated['poNumber'] = $project->poNumber;
                 $validated['poDate'] = $project->poDate;
@@ -54,7 +64,6 @@ public function store(Request $request)
                 $validated['dcReference'] = $project->dcReference;
                 $validated['dcDate'] = $project->dcDate;
             } else {
-                // Handle case where the project is not found
                 return response()->json([
                     'error' => 'Linked project not found',
                     'message' => 'The specified linked project does not exist.'
@@ -62,30 +71,25 @@ public function store(Request $request)
             }
         }
 
-        // Automatically set poDate, jcDate, and dcDate if applicable (or use provided values)
         if ($request->has('poNumber') && empty($validated['poDate'])) {
-            $validated['poDate'] = $request->input('poDate') ?: now();  // Set to current date if no poDate provided
+            $validated['poDate'] = $request->input('poDate') ?: now();  
         }
 
         if ($request->has('jcReference') && empty($validated['jcDate'])) {
-            $validated['jcDate'] = $request->input('jcDate') ?: now();  // Set to current date if no jcDate provided
+            $validated['jcDate'] = $request->input('jcDate') ?: now();  
         }
 
         if ($request->has('dcReference') && empty($validated['dcDate'])) {
-            $validated['dcDate'] = $request->input('dcDate') ?: now();  // Set to current date if no dcDate provided
+            $validated['dcDate'] = $request->input('dcDate') ?: now();  
         }
 
-        // Create the invoice
         $invoice = Invoice::create($validated);
 
-        // Load the related project data (optional, if you need to return project data with the invoice)
         $invoice->load('project');
 
-        // Return success response
         return response()->json($invoice, 201);
 
     } catch (ValidationException $e) {
-        // Return validation errors as JSON
         return response()->json([
             'error' => 'Validation failed',
             'message' => $e->errors()
@@ -108,11 +112,17 @@ public function store(Request $request)
 }
 
     
-    public function show($id)
-    {
-        $invoice = Invoice::with('project')->findOrFail($id);
-        return response()->json($invoice);
-    }
+public function show($id)
+{
+    $invoice = Invoice::with(['project', 'project.jcReferences', 'project.dcReferences'])
+        ->findOrFail($id);
+
+    $invoice->jcReferences = $invoice->project->jcReferences;
+    $invoice->dcReferences = $invoice->project->dcReferences;
+
+    return response()->json($invoice);
+}
+
 
     public function update(Request $request, $id)
     {

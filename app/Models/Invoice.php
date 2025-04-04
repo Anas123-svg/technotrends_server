@@ -21,17 +21,8 @@ class Invoice extends Model
         'clientName',
         'poNumber',
         'poDate',
-        'jcReference',
-        'jcDate',
-        'dcReference',
-        'dcDate',
         'invoiceDate',
         
-    ];
-
-    protected $casts = [
-        'jcReference' => 'array',
-        'dcReference' => 'array',
     ];
 
     public function project()
