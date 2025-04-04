@@ -90,4 +90,34 @@ class ProjectAssignedToUserController extends Controller
             'data' => $projectAssignedToUser,
         ], 200);
     }
+
+
+    public function getProjectsAssignedToUser($user_id)
+{
+    try {
+        $assignedProjects = ProjectAssignedToUsers::where('user_id', $user_id)->get();
+
+        if ($assignedProjects->isEmpty()) {
+            return response()->json([
+                'message' => 'No projects assigned to this user.',
+                'data' => [],
+            ], 404);
+        }
+
+        $projects = $assignedProjects->map(function ($assignment) {
+            return $assignment->project; 
+        });
+
+        return response()->json(
+            $projects,
+        200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'An error occurred while retrieving the projects assigned to the user.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
 }

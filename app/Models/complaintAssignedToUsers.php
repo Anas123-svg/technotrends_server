@@ -15,4 +15,9 @@ class complaintAssignedToUsers extends Model
         'statusByUser',
         'reason',
     ];
+
+    public function complaint()
+    {
+        return $this->belongsTo(Complaint::class, 'complaint_id');
+    }
 }

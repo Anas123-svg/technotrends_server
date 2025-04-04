@@ -59,6 +59,8 @@ Route::post('/projects', [ProjectController::class, 'store']); // Create a new p
 Route::get('/projects/{id}', [ProjectController::class, 'show']); // Get a specific project
 Route::put('/projects/{id}', [ProjectController::class, 'update']); // Update a project
 Route::delete('/projects/{id}', [ProjectController::class, 'destroy']); // Delete a project
+Route::get('assigned/projects/user/{id}', [ProjectAssignedToUserController::class, 'getProjectsAssignedToUser']); // get user assigned projects
+Route::get('assigned/complaints/user/{id}', [ComplaintAssignedToUserController::class, 'getComplaintsAssignedToUser']); // get user assigned complaints
 
 
 

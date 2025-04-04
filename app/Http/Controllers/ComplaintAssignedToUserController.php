@@ -95,4 +95,35 @@ class ComplaintAssignedToUserController extends Controller
             'data' => $complaintAssignedToUser,
         ], 200);
     }
+
+
+
+    public function getComplaintsAssignedToUser($user_id)
+    {
+        try {
+            $assignedComplaints = ComplaintAssignedToUsers::where('user_id', $user_id)->get();
+        
+            if ($assignedComplaints->isEmpty()) {
+                return response()->json([
+                    'message' => 'No complaints assigned to this user.',
+                    'data' => [
+                        'response' => [],
+                    ]
+                ], 404);
+            }
+        
+            $complaints = $assignedComplaints->map(function ($assignment) {
+                return $assignment->complaint; 
+            });
+        
+            return response()->json($complaints, 200);
+        
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while retrieving the complaints assigned to the user.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
 }
