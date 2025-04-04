@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,18 +13,26 @@ class ProjectAssignedToUserController extends Controller
     public function updateProjectAssignedToUser(Request $request, $project_id)
     {
         $validatedData = $request->validate([
-            'worker_ids' => 'required|array', 
-            'worker_ids.*' => 'integer|exists:user,id', 
+            'worker_ids' => 'nullable|array',
+            'worker_ids.*' => 'nullable|integer|exists:user,id',
         ]);
 
         try {
             $projectAssignments = ProjectAssignedToUsers::where('project_id', $project_id)->get();
 
-            if ($projectAssignments->isEmpty()) {
-                return response()->json(['message' => 'No users assigned to this project'], 404);
+            if ($projectAssignments->isEmpty() && empty($validatedData['worker_ids'])) {
+                return response()->json(['message' => 'No users assigned to this project and no new users provided'], 404);
             }
 
-            $newAssignedUserIds = $validatedData['worker_ids'];
+            $newAssignedUserIds = $validatedData['worker_ids'] ?? [];
+
+            if (empty($newAssignedUserIds)) {
+                ProjectAssignedToUsers::where('project_id', $project_id)->delete();
+                return response()->json([
+                    'message' => 'All users removed from the project',
+                    'data' => [],
+                ], 200);
+            }
 
             $existingAssignedUserIds = $projectAssignments->pluck('user_id')->toArray();
 
