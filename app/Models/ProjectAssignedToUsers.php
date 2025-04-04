@@ -14,4 +14,10 @@ class ProjectAssignedToUsers extends Model
         'statusByUser',
         'reason',
     ];
+
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }
