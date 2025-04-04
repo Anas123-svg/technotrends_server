@@ -25,6 +25,7 @@ class ComplaintController extends Controller
                 if ($user) {
                     $user->statusByUser = $assignedUser->statusByUser;
                     $user->reason = $assignedUser->reason;
+                    $user->assignedUserId = $assignedUser->id;
                     $user->makeHidden(['pivot', 'remember_token']);
                 }
 
@@ -203,6 +204,7 @@ class ComplaintController extends Controller
             if ($user) {
                 $user->statusByUser = $assignedUser->statusByUser;
                 $user->reason = $assignedUser->reason;
+                $user->assignedUserId = $assignedUser->id;
                 $user->makeHidden(['pivot', 'remember_token']);
             }
 

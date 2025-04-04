@@ -22,6 +22,7 @@ class ProjectController extends Controller
                 if ($assignedUser) {
                     $user->statusByUser = $assignedUser->statusByUser;
                     $user->reason = $assignedUser->reason;
+                    $user->assignedUserId = $assignedUser->id;
                 }
     
                 $user->makeHidden(['pivot', 'remember_token']);
@@ -135,6 +136,7 @@ class ProjectController extends Controller
             if ($assignedUser) {
                 $user->statusByUser = $assignedUser->statusByUser;
                 $user->reason = $assignedUser->reason;
+                $user->assignedUserId = $assignedUser->id;
             }
     
             $user->makeHidden(['pivot', 'remember_token']);

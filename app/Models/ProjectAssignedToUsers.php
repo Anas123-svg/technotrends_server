@@ -9,6 +9,7 @@ class ProjectAssignedToUsers extends Model
     protected $table = 'project_assigned_to_users';
 
     protected $fillable = [
+        
         'project_id',
         'user_id',
         'statusByUser',
