@@ -68,11 +68,9 @@ class ProjectController extends Controller
 
         ]);
     
-        if ($request->has('poNumber'&& !empty($request->input('poNumber')))) {
+        if ($request->has('poNumber') && !empty($request->input('poNumber'))) {
             $validated['poDate'] = $request->input('poDate') ?: now();  
         }
-    
-    
         if ($request->has('remarks')&& !empty($request->input('remarks'))) {
             $validated['remarksDate'] = $request->input('remarksDate') ?: now();
         }
@@ -307,10 +305,6 @@ class ProjectController extends Controller
                     'clientName' => $project->clientName,
                     'poNumber' => $project->poNumber,
                     'poDate' => $project->poDate,
-                    'jcReference' => $validated['jcReference'] ?? null,
-                    'jcDate' => $validated['jcDate'] ?? null,
-                    'dcReference' => $validated['dcReference'] ?? null,
-                    'dcDate' => $validated['dcDate'] ?? null,
                     'invoiceDate' => now(),
                     'status' => 'Pending',
                 ]);
