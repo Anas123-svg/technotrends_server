@@ -63,6 +63,7 @@ Route::get('assigned/projects/user/{id}', [ProjectAssignedToUserController::clas
 Route::get('assigned/complaints/user/{id}', [ComplaintAssignedToUserController::class, 'getComplaintsAssignedToUser']); // get user assigned complaints
 
 
+Route::get('user/dashboard/{userId}', [UserController::class, 'getUserComplaintsAndProjects']);
 
 Route::post('complaints/{id}/assign-head', [ComplaintController::class, 'assignToHead']);
 Route::post('complaints/{id}/assign-workers', [ComplaintController::class, 'assignToWorkers']);

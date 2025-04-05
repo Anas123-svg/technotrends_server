@@ -85,4 +85,34 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully.']);
     }
+
+
+    public function getUserComplaintsAndProjects($userId)
+    {
+        $user = User::with([
+                'complaints' => function ($query) {
+                    $query->latest(); 
+                },
+                'projects' => function ($query) {
+                    $query->latest();
+                }
+            ])
+            ->find($userId);
+    
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        $recentComplaints = $user->complaints()->take(5)->get();  
+        $recentProjects = $user->projects()->take(5)->get();  
+    
+        return response()->json([
+            'user' => $user,
+            'complaints' => $user->complaints,
+            'projects' => $user->projects,
+            'recent_complaints' => $recentComplaints,
+            'recent_projects' => $recentProjects,
+        ]);
+    }
+    
 }
