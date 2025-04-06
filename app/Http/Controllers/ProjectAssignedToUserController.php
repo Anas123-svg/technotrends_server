@@ -95,7 +95,7 @@ class ProjectAssignedToUserController extends Controller
     public function getProjectsAssignedToUser($user_id)
 {
     try {
-        $assignedProjects = ProjectAssignedToUsers::where('user_id', $user_id)->get();
+        $assignedProjects = ProjectAssignedToUsers::where('user_id', $user_id)->with(['project.jcReferences', 'project.dcReferences'])->get();
 
         if ($assignedProjects->isEmpty()) {
             return response()->json([

@@ -101,7 +101,7 @@ class ComplaintAssignedToUserController extends Controller
     public function getComplaintsAssignedToUser($user_id)
     {
         try {
-            $assignedComplaints = ComplaintAssignedToUsers::where('user_id', $user_id)->get();
+            $assignedComplaints = ComplaintAssignedToUsers::where('user_id', $user_id)->with(['complaint.jcReferences', 'complaint.dcReferences'])->get();
         
             if ($assignedComplaints->isEmpty()) {
                 return response()->json([
