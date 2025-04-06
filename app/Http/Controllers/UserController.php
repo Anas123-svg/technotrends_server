@@ -91,10 +91,12 @@ class UserController extends Controller
     {
         $user = User::with([
                 'complaints' => function ($query) {
-                    $query->latest(); 
+                    $query->latest()
+                        ->with(['jcReferences', 'dcReferences']); 
                 },
                 'projects' => function ($query) {
-                    $query->latest();
+                    $query->latest()
+                    ->with(['jcReferences', 'dcReferences']); 
                 }
             ])
             ->find($userId);
@@ -103,8 +105,8 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
     
-        $recentComplaints = $user->complaints()->take(5)->get();  
-        $recentProjects = $user->projects()->take(5)->get();  
+        $recentComplaints = $user->complaints()->take(5)->with(['jcReferences', 'dcReferences'])->get();  
+        $recentProjects = $user->projects()->take(5)->with(['jcReferences', 'dcReferences'])->get();  
     
         return response()->json([
             'user' => $user,
@@ -114,5 +116,6 @@ class UserController extends Controller
             'recent_projects' => $recentProjects,
         ]);
     }
+    
     
 }

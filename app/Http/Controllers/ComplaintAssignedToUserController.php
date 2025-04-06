@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ComplaintAssignedToUsers;
+use App\Models\complaintAssignedToUsers;
 use Illuminate\Validation\ValidationException;
 use Exception;
 
