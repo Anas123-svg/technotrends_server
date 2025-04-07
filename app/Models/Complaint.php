@@ -73,6 +73,21 @@ class Complaint extends Model
         return $this->hasMany(ComplaintsDcReference::class);
     }
 
-
+    public function toArray()
+    {
+        $array = parent::toArray();
+    
+        if (isset($array['jc_references'])) {
+            $array['jcReferences'] = $array['jc_references'];
+            unset($array['jc_references']);
+        }
+    
+        if (isset($array['dc_references'])) {
+            $array['dcReferences'] = $array['dc_references'];
+            unset($array['dc_references']);
+        }
+    
+        return $array;
+    }
     
 }
