@@ -35,6 +35,8 @@ class Complaint extends Model
         'isPoDateEdited',
         'isDueDateEdited',
         'createdBy',
+        'created_at',
+        'updated_at',
 
     ];
 
