@@ -11,6 +11,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectAssignedToUserController;
 use App\Http\Controllers\ComplaintAssignedToUserController;
+//update
 Route::post('/login', [AuthController::class, 'login']); // Create admin
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
