@@ -108,7 +108,9 @@ class ComplaintController extends Controller
                 $validated['poDate'] = $request->input('poDate') ?: now();
             }
 
-
+        if ($request->has('jcReference') || $request->has('dcReference')) {
+            $validated['status'] = 'Completed';
+        }
             // Handle Remarks-related logic
             if ($request->has('remarks') && !empty($request->input('remarks'))) {
                 $validated['remarksDate'] = $request->input('remarksDate') ?: now();
@@ -286,7 +288,9 @@ class ComplaintController extends Controller
                 $validated['poDate'] = now();
             }
         }
-
+        if ($request->has('jcReference') || $request->has('dcReference')) {
+            $validated['status'] = 'Completed';
+        }
         if ($request->has('poDate')) {
             $validated['poDate'] = $request->input('poDate');
             $validated['isPoDateEdited'] = true;
