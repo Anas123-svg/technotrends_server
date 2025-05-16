@@ -368,6 +368,8 @@ class ProjectController extends Controller
 
         $project = Project::findOrFail($projectId);
         $project->users()->sync($validated['worker_ids']);
+        $project->status = 'Pending';
+        $project->save();
 
         return response()->json([
             'message' => 'Project assigned to workers successfully',

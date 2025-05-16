@@ -427,6 +427,8 @@ class ComplaintController extends Controller
 
         $complaint = Complaint::findOrFail($complaintId);
         $complaint->users()->sync($validated['worker_ids']);
+        $complaint->status = 'Pending';
+        $complaint->save();
 
         return response()->json([
             'message' => 'Complain assigned to workers successfully',
