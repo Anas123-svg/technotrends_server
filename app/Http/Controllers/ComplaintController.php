@@ -61,8 +61,8 @@ class ComplaintController extends Controller
                     'users' => $complaint->users,
                     'jcReferences' => $complaint->jcReferences,
                     'dcReferences' => $complaint->dcReferences,
-                    'created_at'=> $complaint->created_at,
-                    'updated_at'=> $complaint->updated_at        
+                    'created_at' => $complaint->created_at,
+                    'updated_at' => $complaint->updated_at
                 ];
             }),
             200
@@ -108,9 +108,12 @@ class ComplaintController extends Controller
                 $validated['poDate'] = $request->input('poDate') ?: now();
             }
 
-        if ($request->has('jcReference') || $request->has('dcReference')) {
-            $validated['status'] = 'Completed';
-        }
+            $hasValidJcReference = $request->has('jcReference') && is_array($request->jcReference) && count($request->jcReference) > 0;
+            $hasValidDcReference = $request->has('dcReference') && is_array($request->dcReference) && count($request->dcReference) > 0;
+
+            if ($hasValidJcReference || $hasValidDcReference) {
+                $validated['status'] = 'Completed';
+            }
             // Handle Remarks-related logic
             if ($request->has('remarks') && !empty($request->input('remarks'))) {
                 $validated['remarksDate'] = $request->input('remarksDate') ?: now();
@@ -180,9 +183,9 @@ class ComplaintController extends Controller
                 'users' => $complaint->users,
                 'jcReferences' => $complaint->jcReferences,
                 'dcReferences' => $complaint->dcReferences,
-                'created_at'=> $complaint->created_at,
-                'updated_at'=> $complaint->updated_at
-    
+                'created_at' => $complaint->created_at,
+                'updated_at' => $complaint->updated_at
+
             ], 201);
 
         } catch (ValidationException $e) {
@@ -244,8 +247,8 @@ class ComplaintController extends Controller
             'users' => $complaint->users,
             'jcReferences' => $complaint->jcReferences,
             'dcReferences' => $complaint->dcReferences,
-            'created_at'=> $complaint->created_at,
-            'updated_at'=> $complaint->updated_at
+            'created_at' => $complaint->created_at,
+            'updated_at' => $complaint->updated_at
         ], 200);
     }
     public function update(Request $request, $id)
@@ -288,7 +291,10 @@ class ComplaintController extends Controller
                 $validated['poDate'] = now();
             }
         }
-        if ($request->has('jcReference') || $request->has('dcReference')) {
+        $hasValidJcReference = $request->has('jcReference') && is_array($request->jcReference) && count($request->jcReference) > 0;
+        $hasValidDcReference = $request->has('dcReference') && is_array($request->dcReference) && count($request->dcReference) > 0;
+
+        if ($hasValidJcReference || $hasValidDcReference) {
             $validated['status'] = 'Completed';
         }
         if ($request->has('poDate')) {
