@@ -53,7 +53,7 @@ class ProjectController extends Controller
             'status' => 'nullable|string|in:Pending,In Progress,On Hold,Completed,Cancelled',
             'remarks' => 'nullable|string',
             'createdBy' => 'nullable|string',
-            'dueDate' => 'nullable|date',
+            'dueDate' => 'nullable|string',
             'poDate' => 'nullable|string',
             'surveyDate' => 'nullable|string',
             'quotationDate' => 'nullable|string',
