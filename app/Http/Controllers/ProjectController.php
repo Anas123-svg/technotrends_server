@@ -118,6 +118,16 @@ class ProjectController extends Controller
                 $dcReference->save();
             }
         }
+if ($hasValidJcReference || $hasValidDcReference) {
+    Invoice::create([
+            'linkedProject' => $project->id,
+            'clientName' => $project->clientName,
+            'poNumber' => $project->poNumber,
+            'poDate' => $project->poDate,
+            'invoiceDate' => now(),
+            'status' => 'Pending',
+    ]);
+}
 
         if ($request->has('assignedWorkers')) {
             $project->users()->attach($request->assignedWorkers);
@@ -311,8 +321,22 @@ class ProjectController extends Controller
             if ($request->has('assignedWorkers')) {
                 $project->users()->sync($request->assignedWorkers);
             }
+if ($hasValidJcReference || $hasValidDcReference) {
+    $invoiceExists = Invoice::where('linkedProject', $project->id)->exists();
 
-            $existingInvoice = Invoice::where('linkedProject', $project->id)->first();
+    if (!$invoiceExists) {
+        Invoice::create([
+            'linkedProject' => $project->id,
+            'clientName' => $project->clientName,
+            'poNumber' => $project->poNumber,
+            'poDate' => $project->poDate,
+            'invoiceDate' => now(),
+            'status' => 'Pending',
+        ]);
+    }
+}
+
+  /*          $existingInvoice = Invoice::where('linkedProject', $project->id)->first();
 
             if (!$existingInvoice && ($request->has('jcReference') || $request->has('dcReference'))) {
                 Invoice::create([
@@ -324,7 +348,7 @@ class ProjectController extends Controller
                     'status' => 'Pending',
                 ]);
             }
-
+*/
             return response()->json(
                 $project->load(['users', 'jcReferences', 'dcReferences'])->makeHidden(['pivot', 'remember_token'])
             );
